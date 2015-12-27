@@ -31,6 +31,7 @@ libraryDependencies ++= Seq(
   "ch.qos.logback" % "logback-classic" % versions.logback % "test",  
 
   "com.twitter.finatra" %% "finatra-http" % versions.finatra % "test",
+  "com.twitter.finatra" %% "finatra-jackson" % versions.finatra % "test" classifier "tests",
   "com.twitter.inject" %% "inject-server" % versions.finatra % "test",
   "com.twitter.inject" %% "inject-app" % versions.finatra % "test",
   "com.twitter.inject" %% "inject-core" % versions.finatra % "test",
@@ -45,4 +46,5 @@ libraryDependencies ++= Seq(
 
   "org.mockito" % "mockito-core" % versions.mockito % "test",
   "org.scalatest" %% "scalatest" % versions.scalatest % "test",
-  "org.specs2" %% "specs2" % versions.specs2 % "test")
+  "org.specs2" %% "specs2" % versions.specs2 % "test"
+)

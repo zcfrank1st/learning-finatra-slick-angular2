@@ -1,6 +1,6 @@
 package com.tapatron
 
-import com.tapatron.controller.UserController
+import com.tapatron.controller.PostController
 import com.twitter.finagle.http.{Response, Request}
 import com.twitter.finatra.http.HttpServer
 import com.twitter.finatra.http.filters.CommonFilters
@@ -21,7 +21,7 @@ class Server extends HttpServer {
       .filter[LoggingMDCFilter[Request, Response]]
       .filter[TraceIdMDCFilter[Request, Response]]
       .filter[CommonFilters]
-      .add[UserController]
+      .add[PostController]
   }
 
 }
