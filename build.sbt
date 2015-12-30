@@ -1,7 +1,7 @@
-name := "activator-seed"
-organization := "com.example"
+name := "finatra-learning"
+organization := "com.tapatron"
 
-version := "1.0.0-SNAPSHOT"
+version := "0.0.1-SNAPSHOT"
 
 scalaVersion := "2.11.7"
 
@@ -20,15 +20,23 @@ lazy val versions = new {
   val guice = "4.0"
   val logback = "1.0.13"
   val mockito = "1.9.5"
+  val postgres = "9.1-901-1.jdbc4"
   val scalatest = "2.2.3"
+  val slick = "3.1.1"
   val specs2 = "2.3.12"
+  val typesafeConfig = "1.2.1"
 }
 
 libraryDependencies ++= Seq(
   "com.twitter.finatra" %% "finatra-http" % versions.finatra,
   "com.twitter.finatra" %% "finatra-slf4j" % versions.finatra,
   "ch.qos.logback" % "logback-classic" % versions.logback,
-  "ch.qos.logback" % "logback-classic" % versions.logback % "test",  
+  "com.typesafe.slick" %% "slick" % versions.slick,
+  "com.typesafe.slick" %% "slick-hikaricp" % versions.slick,
+  "postgresql" % "postgresql" % versions.postgres,
+  "com.typesafe" % "config" % versions.typesafeConfig,
+  "com.fasterxml.jackson.datatype" % "jackson-datatype-jsr310" % "2.6.4" exclude("com.fasterxml.jackson.core", "jackson-databind"),
+  "ch.qos.logback" % "logback-classic" % versions.logback % "test",
 
   "com.twitter.finatra" %% "finatra-http" % versions.finatra % "test",
   "com.twitter.finatra" %% "finatra-jackson" % versions.finatra % "test" classifier "tests",

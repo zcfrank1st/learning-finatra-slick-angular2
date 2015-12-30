@@ -11,27 +11,28 @@ import com.twitter.finatra.validation.{Max, Min, NotEmpty}
 class PostController @Inject()(postService: PostService) extends Controller {
 
   get("/user") { request: GetPostsRequest =>
-    postService.posts(request.limit)
+    val p = postService.posts(request.limit)
+    p
   }
 
-  post("/user") { request: AddPostRequest =>
+  post("/user") { request: CreatePostRequest =>
     val post = postService.create(request.title)
     response.created(post)
   }
 
-  delete("/user/:id") { request: DeleteRequest =>
+  delete("/user/:id") { request: DeletePostRequest =>
     postService.deleteById(request.id)
   }
 
-  put("/user/:id") { request: UpdateRequest =>
+  put("/user/:id") { request: UpdatePostRequest =>
     postService.updateById(request.id, request.title)
   }
 }
 
 case class GetPostsRequest(@Min(1) @Max(100) @QueryParam limit: Int = 10)
 
-case class AddPostRequest(@NotEmpty title: String)
+case class CreatePostRequest(@NotEmpty title: String)
 
-case class UpdateRequest(@RouteParam id: UUID, title: String)
+case class UpdatePostRequest(@RouteParam id: UUID, title: String)
 
-case class DeleteRequest(@RouteParam id: UUID)
+case class DeletePostRequest(@RouteParam id: UUID)

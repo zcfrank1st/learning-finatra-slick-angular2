@@ -1,11 +1,12 @@
 package com.tapatron.fixtures
 
-import java.util.UUID
+import java.time.LocalDateTime
+import java.util.UUID.randomUUID
 
 import com.tapatron.domain.Post
 
 object PostFixtures {
-  val sportsPost = Post(UUID.randomUUID(), "They won!!!", 314515161)
-  val environmentPost = Post(UUID.randomUUID(), "High levels detected", 314515165)
-  val politicsPost = Post(UUID.randomUUID(), "Election debate", 314515169)
+  val sportsPost = Post(randomUUID(), "They won!!!", LocalDateTime.now())
+  val environmentPost = Post(randomUUID(), "High water levels detected", LocalDateTime.now())
+  val politicsPost = Post(randomUUID(), "Election debate", LocalDateTime.now())
 }

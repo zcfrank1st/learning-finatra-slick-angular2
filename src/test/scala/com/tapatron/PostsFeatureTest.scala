@@ -1,18 +1,19 @@
 package com.tapatron
 
-import com.fasterxml.jackson.databind.ObjectMapper
 import com.google.inject.testing.fieldbinder.Bind
-import com.tapatron.domain.Post
 import com.tapatron.fixtures.PostFixtures._
 import com.tapatron.persistence.PostDao
 import com.twitter.finagle.http.Response
-import com.twitter.finagle.http.Status.{Created, Ok, BadRequest}
+import com.twitter.finagle.http.Status.{BadRequest, Created, Ok}
 import com.twitter.finatra.http.test.{EmbeddedHttpServer, HttpTest}
 import com.twitter.inject.Mockito
 import com.twitter.inject.server.FeatureTest
-import com.twitter.util.Future
 
-class ExampleFeatureTest extends FeatureTest with Mockito with HttpTest {
+import scala.concurrent.Future
+import scala.concurrent.ExecutionContext.Implicits.global
+
+
+class PostsFeatureTest extends FeatureTest with Mockito with HttpTest {
   @Bind val postDao = smartMock[PostDao]
 
   override val server = new EmbeddedHttpServer(new Server)
@@ -47,11 +48,7 @@ class ExampleFeatureTest extends FeatureTest with Mockito with HttpTest {
           """,
         andExpect = Created
       )
-      var content = res.contentString
-      val p:Post = new ObjectMapper().readValue(content, classOf[Post])
       res.getContentString() should include (post.title)
     }
   }
-
-
 }
