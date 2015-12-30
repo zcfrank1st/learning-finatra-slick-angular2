@@ -35,7 +35,6 @@ libraryDependencies ++= Seq(
   "com.typesafe.slick" %% "slick-hikaricp" % versions.slick,
   "postgresql" % "postgresql" % versions.postgres,
   "com.typesafe" % "config" % versions.typesafeConfig,
-  "com.fasterxml.jackson.datatype" % "jackson-datatype-jsr310" % "2.6.4" exclude("com.fasterxml.jackson.core", "jackson-databind"),
   "ch.qos.logback" % "logback-classic" % versions.logback % "test",
 
   "com.twitter.finatra" %% "finatra-http" % versions.finatra % "test",

@@ -1,5 +1,6 @@
 package com.tapatron
 
+import com.tapatron.common.CustomJacksonModule
 import com.tapatron.controller.PostController
 import com.twitter.finagle.http.{Request, Response}
 import com.twitter.finatra.http.HttpServer
@@ -11,6 +12,8 @@ import com.twitter.finatra.logging.modules.Slf4jBridgeModule
 object ServerMain extends Server
 
 class Server extends HttpServer {
+  override def jacksonModule = CustomJacksonModule
+
   override def modules = Seq(Slf4jBridgeModule)
 
   override def defaultFinatraHttpPort = ":9954"
