@@ -5,4 +5,3 @@ import java.util.UUID
 import java.util.UUID._
 
 case class Post(id: UUID = randomUUID(), title: String, added: LocalDateTime)
-

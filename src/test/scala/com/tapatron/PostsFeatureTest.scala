@@ -12,7 +12,6 @@ import com.twitter.inject.server.FeatureTest
 import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
 
-
 class PostsFeatureTest extends FeatureTest with Mockito with HttpTest {
   @Bind val postDao = smartMock[PostDao]
 

@@ -1,4 +1,4 @@
-package com.tapatron.common
+package com.tapatron.common.json
 
 import com.fasterxml.jackson.annotation.JsonInclude.Include
 import com.fasterxml.jackson.databind.module.SimpleModule
@@ -8,7 +8,8 @@ object CustomJacksonModule extends FinatraJacksonModule {
 
   override val additionalJacksonModules = Seq(
     new SimpleModule {
-      addSerializer(LocalDateTimeParser)
+      addSerializer(LocalDateTimeSerializer)
+      addSerializer(LocalDateSerializer)
     })
 
   override val serializationInclusion = Include.NON_EMPTY

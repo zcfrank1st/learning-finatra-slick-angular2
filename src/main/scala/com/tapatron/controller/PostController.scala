@@ -11,8 +11,7 @@ import com.twitter.finatra.validation.{Max, Min, NotEmpty}
 class PostController @Inject()(postService: PostService) extends Controller {
 
   get("/user") { request: GetPostsRequest =>
-    val p = postService.posts(request.limit)
-    p
+    postService.posts(request.limit)
   }
 
   post("/user") { request: CreatePostRequest =>

@@ -1,6 +1,6 @@
 package com.tapatron
 
-import com.tapatron.common.CustomJacksonModule
+import com.tapatron.common.json.CustomJacksonModule
 import com.tapatron.controller.PostController
 import com.twitter.finagle.http.{Request, Response}
 import com.twitter.finatra.http.HttpServer
