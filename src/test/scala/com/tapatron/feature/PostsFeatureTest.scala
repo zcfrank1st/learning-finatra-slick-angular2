@@ -14,6 +14,7 @@ import com.twitter.finagle.http.Status._
 import com.twitter.finatra.http.test.{EmbeddedHttpServer, HttpTest}
 import com.twitter.inject.Mockito
 import com.twitter.inject.server.FeatureTest
+import com.typesafe.config.{Config, ConfigFactory}
 import org.scalatest.BeforeAndAfterEach
 import com.ninja_squad.dbsetup.Operations._
 
@@ -28,11 +29,13 @@ class PostsFeatureTest extends FeatureTest with Mockito with HttpTest with Befor
     addSerializer(LocalDateSerializer)
   })
 
-  // TODO externalize config
+  val config:Config = ConfigFactory.load("dbSetup.conf")
   override def beforeEach() = {
     val operation = sequenceOf(DbSetupOperations.DeleteAll, DbSetupOperations.postFixtures)
     val dbSetup = new DbSetup(new DriverManagerDestination(
-      "jdbc:postgresql://localhost:5432/finatra", "postgres", "postgres"), operation)
+      config.getString("db.url"),
+      config.getString("db.username"),
+      config.getString("db.password")), operation)
     dbSetup.launch()
   }
 

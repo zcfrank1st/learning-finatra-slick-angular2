@@ -2,7 +2,6 @@ package com.tapatron.persistence
 
 import java.util.UUID
 
-import com.tapatron.DB
 import slick.driver.PostgresDriver.api._
 
 import scala.concurrent.Future
@@ -15,7 +14,7 @@ trait EntityKey {
   def id: slick.lifted.Rep[UUID]
 }
 
-class GenericDao[T <: Entity, U <: Table[T] with EntityKey](val table: TableQuery[U]) extends DB {
+class GenericDao[T <: Entity, U <: Table[T] with EntityKey](val table: TableQuery[U], val db: Database) {
 
   type Record = U#TableElementType
 

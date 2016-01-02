@@ -14,7 +14,7 @@ object ServerMain extends Server
 class Server extends HttpServer {
   override def jacksonModule = CustomJacksonModule
 
-  override def modules = Seq(Slf4jBridgeModule)
+  override def modules = Seq(Slf4jBridgeModule, AppModule)
 
   override def defaultFinatraHttpPort = ":9954"
 
