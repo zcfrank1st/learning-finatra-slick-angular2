@@ -1,12 +1,14 @@
 package com.tapatron.fixtures
 
-import java.time.LocalDateTime
+import java.util.Date
 import java.util.UUID.randomUUID
 
-import com.tapatron.domain.Post
+import com.tapatron.persistence.Post
 
 object PostFixtures {
-  val sportsPost = Post(randomUUID(), "They won!!!", LocalDateTime.now())
-  val environmentPost = Post(randomUUID(), "High water levels detected", LocalDateTime.now())
-  val politicsPost = Post(randomUUID(), "Election debate", LocalDateTime.now())
+  val sportsPost = Post(randomUUID(), "They won!!!", new Date().getTime)
+  val environmentPost = Post(randomUUID(), "High water levels detected", new Date().getTime)
+  val politicsPost = Post(randomUUID(), "Election debate", new Date().getTime)
+
+  val posts = Seq(sportsPost, environmentPost, politicsPost)
 }

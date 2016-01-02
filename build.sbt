@@ -33,6 +33,7 @@ libraryDependencies ++= Seq(
   "ch.qos.logback" % "logback-classic" % versions.logback,
   "com.typesafe.slick" %% "slick" % versions.slick,
   "com.typesafe.slick" %% "slick-hikaricp" % versions.slick,
+  "com.typesafe.slick" %% "slick-testkit" % versions.slick % "test",
   "postgresql" % "postgresql" % versions.postgres,
   "com.typesafe" % "config" % versions.typesafeConfig,
   "ch.qos.logback" % "logback-classic" % versions.logback % "test",
@@ -51,6 +52,7 @@ libraryDependencies ++= Seq(
   "com.twitter.inject" %% "inject-core" % versions.finatra % "test" classifier "tests",
   "com.twitter.inject" %% "inject-modules" % versions.finatra % "test" classifier "tests",
 
+  "com.ninja-squad" % "DbSetup" % "1.6.0" % "test",
   "org.mockito" % "mockito-core" % versions.mockito % "test",
   "org.scalatest" %% "scalatest" % versions.scalatest % "test",
   "org.specs2" %% "specs2" % versions.specs2 % "test"

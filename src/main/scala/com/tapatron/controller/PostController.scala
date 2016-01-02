@@ -15,8 +15,7 @@ class PostController @Inject()(postService: PostService) extends Controller {
   }
 
   post("/user") { request: CreatePostRequest =>
-    val post = postService.create(request.title)
-    response.created(post)
+    postService.create(request.title)
   }
 
   delete("/user/:id") { request: DeletePostRequest =>
