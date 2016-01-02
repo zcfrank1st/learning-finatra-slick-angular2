@@ -19,8 +19,8 @@ class GenericDao[T <: Entity, U <: Table[T] with EntityKey](val table: TableQuer
   type Record = U#TableElementType
 
   def save(record: Record): Future[Int] = {
-    val query = (table += record).transactionally
-    db.run(query)
+    val query = table += record
+    db.run(query.transactionally)
   }
 
   def findAll(limit: Int): Future[Seq[Record]] = {
@@ -29,6 +29,6 @@ class GenericDao[T <: Entity, U <: Table[T] with EntityKey](val table: TableQuer
 
   def delete(id: UUID): Future[Int] = {
     val query = table.filter(row => row.id === id).delete
-    db.run(query)
+    db.run(query.transactionally)
   }
 }

@@ -6,9 +6,9 @@ import com.twitter.finagle.http.Response
 import com.twitter.finatra.http.response.ResponseBuilder
 import com.twitter.util.Future
 
-class ResponseMapper {
+object ResponseCreator {
 
-  def toResponse(outcome: Future[Either[Error, _]], responseBuilder: ResponseBuilder): Future[Response] = {
+  def create(outcome: Future[Either[Error, _]], responseBuilder: ResponseBuilder): Future[Response] = {
     outcome flatMap {
       case Left(error) => responseBuilder.status(error.status).body(error.reason).toFuture
       case Right(result) => responseBuilder.ok(result).toFuture
