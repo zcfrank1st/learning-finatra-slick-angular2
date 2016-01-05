@@ -16,13 +16,14 @@ resolvers ++= Seq(
   "Twitter Maven" at "https://maven.twttr.com")
 
 lazy val versions = new {
-  val finatra = "2.1.1"
+  val finatra = "2.1.2"
   val guice = "4.0"
   val logback = "1.0.13"
   val mockito = "1.9.5"
   val postgres = "9.1-901-1.jdbc4"
   val scalatest = "2.2.3"
   val scalaz = "7.2.0"
+  val shiro = "1.2.4"
   val slick = "3.1.1"
   val specs2 = "2.3.12"
   val typesafeConfig = "1.2.1"
@@ -30,6 +31,7 @@ lazy val versions = new {
 
 libraryDependencies ++= Seq(
   "com.twitter.finatra" %% "finatra-http" % versions.finatra,
+  "com.twitter.inject" %% "inject-request-scope" % versions.finatra,
   "com.twitter.finatra" %% "finatra-slf4j" % versions.finatra,
   "ch.qos.logback" % "logback-classic" % versions.logback,
   "com.typesafe.slick" %% "slick" % versions.slick,
@@ -39,6 +41,9 @@ libraryDependencies ++= Seq(
   "com.typesafe" % "config" % versions.typesafeConfig,
   "ch.qos.logback" % "logback-classic" % versions.logback % "test",
   "org.scalaz" %% "scalaz-core" % versions.scalaz,
+  "org.apache.shiro" % "shiro-core" % versions.shiro,
+  "org.apache.shiro" % "shiro-web" % versions.shiro,
+  "org.apache.shiro" % "shiro-guice" % versions.shiro,
 
   "com.twitter.finatra" %% "finatra-http" % versions.finatra % "test",
   "com.twitter.finatra" %% "finatra-jackson" % versions.finatra % "test" classifier "tests",

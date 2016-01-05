@@ -5,6 +5,8 @@ import javax.inject.Inject
 
 import slick.driver.PostgresDriver.api._
 
+case class Post(id: UUID, title: String, added: Long) extends Entity
+
 final class Posts(tag: Tag) extends Table[Post](tag, "posts") with EntityKey {
   def id = column[UUID]("id", O.PrimaryKey)
 
