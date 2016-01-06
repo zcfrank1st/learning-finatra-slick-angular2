@@ -1,11 +1,10 @@
 import {Component, Inject} from "angular2/core";
-import {UserService} from "./user-service";
+import {UserService} from "./service/user-service";
 
 @Component({
-    selector: 'field-form',
-    templateUrl: 'app/login-form.component.html'
+    templateUrl: 'app/login-form.html'
 })
-export class FieldForm {
+export class Login {
     userService:UserService;
     model = new LoginFormModel();
 
@@ -14,7 +13,7 @@ export class FieldForm {
     }
 
     onSubmit() {
-        this.userService.login(this.model.username, this.model.password)
+        this.userService.login(this.model.username, this.model.password);
     }
 }
 

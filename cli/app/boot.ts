@@ -1,6 +1,11 @@
 import {bootstrap}    from 'angular2/platform/browser'
-import {AppComponent} from './app-component'
-import {UserService}  from "./user-service";
+import {AppComponent} from './app'
 import {HTTP_PROVIDERS} from "angular2/http";
+import {ROUTER_PROVIDERS, ROUTER_DIRECTIVES, Location, LocationStrategy, HashLocationStrategy} from 'angular2/router';
+import {PostService} from "./service/post-service";
+import {UserService}  from "./service/user-service";
+import {provide} from "angular2/core";
 
-bootstrap(AppComponent, [UserService, HTTP_PROVIDERS]);
+bootstrap(AppComponent, [UserService, PostService, Location, LocationStrategy,
+    HTTP_PROVIDERS, ROUTER_PROVIDERS,
+    ROUTER_DIRECTIVES, provide(LocationStrategy, {useClass: HashLocationStrategy})]);

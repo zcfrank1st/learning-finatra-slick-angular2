@@ -1,7 +1,6 @@
 package com.tapatron.controller
 
 import com.tapatron.error.Error
-import com.tapatron.persistence.Post
 import com.twitter.finagle.http.Response
 import com.twitter.finatra.http.response.ResponseBuilder
 import com.twitter.util.Future
@@ -13,7 +12,7 @@ object ResponseCreator {
       case Left(error) => responseBuilder.status(error.status).body(error.reason).toFuture
       case Right(result) => responseBuilder.ok(result).toFuture
     } rescue {
-      case t => responseBuilder.internalServerError.toFutureException
+      case throwable => responseBuilder.internalServerError.toFutureException
     }
   }
 

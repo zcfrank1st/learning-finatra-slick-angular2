@@ -5,7 +5,7 @@ import javax.inject.{Inject, Singleton}
 
 import com.google.inject.Provider
 import com.tapatron.error.Error
-import com.tapatron.persistence.{User, Post}
+import com.tapatron.persistence.{Post, User}
 import com.tapatron.service.PostService
 import com.twitter.finatra.http.Controller
 import com.twitter.finatra.request.{QueryParam, RouteParam}
@@ -13,28 +13,36 @@ import com.twitter.finatra.validation.{Max, Min, NotEmpty}
 import com.twitter.util.Future
 
 @Singleton
-class PostController @Inject()(postService: PostService, currentUser: Provider[Option[User]]) extends Controller {
+class PostController @Inject()(postService: PostService, subject: Provider[Option[User]]) extends Controller {
 
   get("/post") { request: GetPostsRequest =>
-    currentUser.get().map { user =>
-      postService.posts(request.limit)
-    } getOrElse  {
+    postService.posts(request.limit)
+  }
+
+  post("/post") { request: CreatePostRequest =>
+    subject.get().map { user =>
+      val serviceOutcome: Future[Either[Error, Post]] = postService.create(request.title)
+      ResponseCreator.create(serviceOutcome, response)
+    } getOrElse {
       response.unauthorized
     }.toFuture
   }
 
-  post("/post") { request: CreatePostRequest =>
-    val serviceOutcome: Future[Either[Error, Post]] = postService.create(request.title)
-    ResponseCreator.create(serviceOutcome, response)
-  }
-
   delete("/post/:id") { request: DeletePostRequest =>
-    val serviceOutcome: Future[Either[Error, Unit]] = postService.deleteById(request.id)
-    ResponseCreator.create(serviceOutcome, response)
+    subject.get().map { user =>
+      val serviceOutcome: Future[Either[Error, Unit]] = postService.deleteById(request.id)
+      ResponseCreator.create(serviceOutcome, response)
+    } getOrElse {
+      response.unauthorized
+    }.toFuture
   }
 
   put("/post/:id") { request: UpdatePostRequest =>
-    postService.updateById(request.id, request.title)
+    subject.get().map { user =>
+      postService.updateById(request.id, request.title)
+    } getOrElse {
+      response.unauthorized
+    }.toFuture
   }
 }
 

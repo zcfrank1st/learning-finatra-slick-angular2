@@ -12,17 +12,17 @@ object SecurityUtils {
     def encode(decoded: String) = new String(ApacheBase64.encodeBase64(decoded.getBytes))
   }
 
-  def credentialsFromAuthHeader(authHeader: String): Either[BadCredentialsError, Credentials] = {
+  def credentialsFromAuthHeader(authHeader: String): Option[Credentials] = {
     if (!authHeader.contains("Basic ")) {
-      Left(BadCredentialsError("Invalid credentials"))
+      None
     } else {
       val baStr = authHeader.replaceFirst("Basic ", "")
       val decoded = Base64.decode(baStr)
       if (decoded.contains(":")) {
-        val Array(user, password) = new String(decoded).split(":")
-        Right(Credentials(user, password))
+        val Array(user, password) = decoded.split(":")
+        Some(Credentials(user, password))
       } else {
-        Left(BadCredentialsError("Invalid credentials"))
+        None
       }
     }
   }

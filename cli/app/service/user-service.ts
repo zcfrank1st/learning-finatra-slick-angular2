@@ -4,10 +4,9 @@ import 'rxjs/add/operator/map';
 import {Observable} from 'rxjs/Observable';
 
 export class UserService {
-    posts = [];
     apiUrl = "http://localhost:9954";
 
-    constructor(@Inject(Http) private http: Http) {
+    constructor(@Inject(Http) private http:Http) {
         // TODO: Use official Angular2 CORS support when merged (https://github.com/angular/angular/issues/4231).
         let _build = (<any> http)._backend._browserXHR.build;
         (<any> http)._backend._browserXHR.build = () => {
@@ -17,17 +16,30 @@ export class UserService {
         };
     }
 
+    getAll():Observable<any> {
+        return this.http.get(`${this.apiUrl}/user`);
+    }
+
+    logout():Observable<any> {
+        return this.http.post(`${this.apiUrl}/logout`, '');
+    }
+
     login(username:string, password:string) {
         const headers = new Headers();
         headers.append("Authorization", UserService.encodeCredentials(username, password));
 
         this.http.post(`${this.apiUrl}/login`, '', {headers: headers})
-            .map(res => res.json())
-            .subscribe(_ => _);
-
-        this.http.get(`${this.apiUrl}/post`)
-            .map(res => res.json())
-            .subscribe(people => console.log(people));
+            .subscribe(
+                res => console.log(res),
+                err => {
+                    if (err.status === 401) {
+                        console.log("unauthorized")
+                    } else {
+                        console.log("error")
+                    }
+                },
+                ()  => {}
+            );
     }
 
     static encodeCredentials(username:string, password:string):string {

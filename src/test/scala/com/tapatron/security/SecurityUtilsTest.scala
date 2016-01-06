@@ -11,8 +11,8 @@ class SecurityUtilsTest extends FlatSpec with GivenWhenThen {
 
     val creds = SecurityUtils.credentialsFromAuthHeader(header)
 
-    assert(creds.right.get.username === "stein")
-    assert(creds.right.get.password === "password")
+    assert(creds.get.username === "stein")
+    assert(creds.get.password === "password")
   }
 
   it should "handle junk credentials" in {
@@ -20,7 +20,7 @@ class SecurityUtilsTest extends FlatSpec with GivenWhenThen {
 
     val creds = SecurityUtils.credentialsFromAuthHeader(headerJunk)
 
-    assert(creds.isLeft === true)
+    assert(creds.isEmpty === true)
   }
 
 

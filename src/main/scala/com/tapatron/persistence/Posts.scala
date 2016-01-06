@@ -1,7 +1,7 @@
 package com.tapatron.persistence
 
 import java.util.UUID
-import javax.inject.Inject
+import javax.inject.{Singleton, Inject}
 
 import slick.driver.PostgresDriver.api._
 
@@ -17,4 +17,5 @@ final class Posts(tag: Tag) extends Table[Post](tag, "posts") with EntityKey {
   def * = (id, title, added) <>(Post.tupled, Post.unapply)
 }
 
+@Singleton
 class PostsDao @Inject()(db: Database) extends GenericDao[Post, Posts] (TableQuery[Posts], db)

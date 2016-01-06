@@ -2,8 +2,6 @@ package com.tapatron.security
 
 import com.google.inject.Inject
 import com.tapatron.persistence.User
-import com.twitter.finagle.http.filter.Cors
-import com.twitter.finagle.http.filter.Cors.HttpFilter
 import com.twitter.finagle.http.{CookieMap, Request, Response}
 import com.twitter.finagle.{Service, SimpleFilter}
 import com.twitter.inject.requestscope.FinagleRequestScope
