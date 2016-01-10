@@ -13,7 +13,7 @@ CREATE TABLE posts (
   title   TEXT             NOT NULL,
   added   BIGINT           NOT NULL,
   user_id UUID             NOT NULL,
-  CONSTRAINT posts_users_fk FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE
+  CONSTRAINT user_fk FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE
 );
 
 INSERT INTO users (id, username, password, permissions) VALUES

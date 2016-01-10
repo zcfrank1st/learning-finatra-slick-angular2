@@ -1,19 +1,12 @@
 package com.tapatron.persistence
 
 import java.util.UUID
-import java.util.UUID.randomUUID
 import javax.inject.{Inject, Singleton}
 
-import com.tapatron.domain.Permissions
-import com.tapatron.persistence.SlickExtension._
+import com.tapatron.domain.{Permissions, User}
 import slick.driver.PostgresDriver.api._
-
+import SlickExtension._
 import scala.concurrent.Future
-
-case class User(id: UUID = randomUUID(),
-                username: String,
-                password: String,
-                permissions: Permissions = new Permissions(Seq())) extends Entity
 
 final class Users(tag: Tag) extends Table[User](tag, "users") with EntityKey {
   def id = column[UUID]("id", O.PrimaryKey)

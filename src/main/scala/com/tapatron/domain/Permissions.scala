@@ -1,7 +1,7 @@
 package com.tapatron.domain
 
 class Permissions(val permissions: Seq[Permission] = Seq()) {
-  def hasPermission(permission: Permission): Boolean = permissions.contains(permission)
+  def contains(permission: Permission): Boolean = permissions.contains(permission)
 }
 
 object Permissions {

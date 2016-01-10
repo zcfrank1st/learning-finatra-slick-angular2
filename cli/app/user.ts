@@ -10,7 +10,7 @@ import {UserService} from "./service/user-service";
         </li>
      </ul>`
 })
-export class Users {
+export class Profile {
     private userService:UserService;
     users:User[] = [];
 

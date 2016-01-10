@@ -5,7 +5,9 @@ import java.util.{Date, UUID}
 import javax.inject.{Inject, Singleton}
 
 import com.tapatron.common.TwitterConverters.scalaToTwitterFuture
-import com.tapatron.error.{Error, NotFoundError, ServerError}
+import com.tapatron.domain.Permission.CREATE_POSTS
+import com.tapatron.domain.User
+import com.tapatron.error.{UnauthorizedError, Error, NotFoundError, ServerError}
 import com.tapatron.persistence.{Post, PostsDao}
 import com.twitter.util.{Future, Promise}
 
@@ -17,13 +19,17 @@ class PostService @Inject()(postDao: PostsDao) {
 
   def posts(limit: Int): Future[Seq[Post]] = postDao.findAll(limit)
 
-  def create(title: String): Future[Either[Error, Post]] = {
+  def create(title: String, user: User): Future[Either[Error, Post]] = {
     val outcome = new Promise[Either[Error, Post]]
-    val post = Post(randomUUID(), title, new Date().getTime)
 
-    postDao.save(post).onComplete {
-      case Success(_) => outcome.setValue(Right(post))
-      case Failure(t) => outcome.setException(t)
+    if (user.hasPermissionTo(CREATE_POSTS)) {
+      val post = Post(randomUUID(), title, new Date().getTime, UUID.fromString("ad2d5e58-12d9-4857-a952-c4e4be44caf3"))
+      postDao.save(post).onComplete {
+        case Success(_) => outcome.setValue(Right(post))
+        case Failure(t) => outcome.setException(t)
+      }
+    } else {
+      outcome.setValue(Left(UnauthorizedError("User is not permitted to access this resource")))
     }
 
     outcome

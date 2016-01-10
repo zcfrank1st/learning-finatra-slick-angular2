@@ -4,9 +4,11 @@ import java.util.UUID
 import javax.inject.{Inject, Singleton}
 
 import com.google.inject.Provider
+import com.tapatron.domain.User
 import com.tapatron.error.Error
-import com.tapatron.persistence.{Post, User}
+import com.tapatron.persistence.Post
 import com.tapatron.service.PostService
+import com.twitter.finagle.http.Status
 import com.twitter.finatra.http.Controller
 import com.twitter.finatra.request.{QueryParam, RouteParam}
 import com.twitter.finatra.validation.{Max, Min, NotEmpty}
@@ -21,8 +23,8 @@ class PostController @Inject()(postService: PostService, subject: Provider[Optio
 
   post("/post") { request: CreatePostRequest =>
     subject.get().map { user =>
-      val serviceOutcome: Future[Either[Error, Post]] = postService.create(request.title)
-      ResponseCreator.create(serviceOutcome, response)
+      val serviceOutcome: Future[Either[Error, Post]] = postService.create(request.title, user)
+      ResponseCreator.create(serviceOutcome, response, Status.Created)
     } getOrElse {
       response.unauthorized
     }.toFuture
@@ -31,7 +33,7 @@ class PostController @Inject()(postService: PostService, subject: Provider[Optio
   delete("/post/:id") { request: DeletePostRequest =>
     subject.get().map { user =>
       val serviceOutcome: Future[Either[Error, Unit]] = postService.deleteById(request.id)
-      ResponseCreator.create(serviceOutcome, response)
+      ResponseCreator.create(serviceOutcome, response, Status.Ok)
     } getOrElse {
       response.unauthorized
     }.toFuture

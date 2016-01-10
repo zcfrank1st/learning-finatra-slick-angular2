@@ -3,7 +3,8 @@ package com.tapatron.service
 import javax.inject.{Singleton, Inject}
 
 import com.tapatron.common.TwitterConverters._
-import com.tapatron.persistence.{User, UsersDao}
+import com.tapatron.domain.User
+import com.tapatron.persistence.UsersDao
 import com.twitter.util.Future
 import scala.concurrent.ExecutionContext.Implicits.global
 

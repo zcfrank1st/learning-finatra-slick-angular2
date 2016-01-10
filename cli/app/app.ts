@@ -2,20 +2,20 @@ import {Inject, Component} from 'angular2/core';
 import {Login} from "./login-form";
 import {RouteConfig, Location, ROUTER_DIRECTIVES, ROUTER_PROVIDERS} from "angular2/router";
 import {Home} from "./home";
-import {Users} from "./user";
+import {Profile} from "./user";
 import {UserService} from "./service/user-service";
+import {Create} from "./create";
 
 @Component({
     selector: 'my-app',
     directives: [Login, ROUTER_DIRECTIVES],
     template: `
-        <h1>Angular2 App</h1>
-
+        <h3>zinternetz</h3>
         <nav>
             <a [routerLink]="['Home']">Home</a>
+            <a [routerLink]="['Profile']">Profile</a>
             <a [routerLink]="['Login']">Login</a>
-            <a [routerLink]="['Users']">Users</a>
-            <a (click)="logout()">Logout</a>
+            <a [routerLink]="['Create']">Create</a>
         </nav>
         <router-outlet></router-outlet>
     `
@@ -23,7 +23,8 @@ import {UserService} from "./service/user-service";
 @RouteConfig([
     {path: '/home',  name: 'Home',  component: Home},
     {path: '/login', name: 'Login', component: Login},
-    {path: '/users', name: 'Users', component: Users},
+    {path: '/profile', name: 'Profile', component: Profile},
+    {path: '/create', name: 'Create', component: Create},
 ])
 export class AppComponent {
     private userService:UserService;

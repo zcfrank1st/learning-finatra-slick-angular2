@@ -1,77 +1,66 @@
 package com.tapatron.feature
 
-import com.fasterxml.jackson.databind.module.SimpleModule
-import com.google.inject.testing.fieldbinder.Bind
-import com.ninja_squad.dbsetup.DbSetup
-import com.ninja_squad.dbsetup.destination.DriverManagerDestination
-import com.tapatron.Server
-import com.tapatron.common.DbSetupOperations
-import com.tapatron.common.json.{LocalDateSerializer, LocalDateTimeSerializer}
+import com.tapatron.common.TestUtils.objectMapper
 import com.tapatron.fixtures.PostFixtures._
-import com.tapatron.persistence.PostsDao
-import com.twitter.finagle.http.Response
+import com.tapatron.fixtures.UserFixtures.adminUser
+import com.tapatron.persistence.Post
 import com.twitter.finagle.http.Status._
-import com.twitter.finatra.http.test.{EmbeddedHttpServer, HttpTest}
-import com.twitter.inject.Mockito
-import com.twitter.inject.server.FeatureTest
-import com.typesafe.config.{Config, ConfigFactory}
-import org.scalatest.BeforeAndAfterEach
-import com.ninja_squad.dbsetup.Operations._
 
-import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
+class PostsFeatureTest extends AppFeatureTest {
 
-class PostsFeatureTest extends FeatureTest with Mockito with HttpTest with BeforeAndAfterEach {
-  @Bind val postDao = smartMock[PostsDao]
+  "Post Controller " should {
 
-  mapper.registerModule(new SimpleModule {
-    addSerializer(LocalDateTimeSerializer)
-    addSerializer(LocalDateSerializer)
-  })
+    "return the posts " in {
 
-  val config:Config = ConfigFactory.load("dbSetup.conf")
-  override def beforeEach() = {
-    val operation = sequenceOf(DbSetupOperations.DeleteAll, DbSetupOperations.postFixtures)
-    val dbSetup = new DbSetup(new DriverManagerDestination(
-      config.getString("db.url"),
-      config.getString("db.username"),
-      config.getString("db.password")), operation)
-    dbSetup.launch()
-  }
+      Given("three posts exist in the database")
+      persistPosts(Seq(sportsPost, politicsPost, environmentPost), byUser = adminUser)
 
-  override val server = new EmbeddedHttpServer(new Server)
+      When("the api receives a request for the most recent two posts")
+      val response = server.httpGet(path = s"/post?limit=2")
 
-  "Post Controller" should {
+      Then("the 2 most recent posts are returned")
+      val content = response.getContentString
+      val posts = objectMapper.readValue[Seq[Post]](content)
 
-    "return the posts" in {
-      val limit = 2
-      val posts = Seq(sportsPost, politicsPost)
-      postDao.findAll(limit) returns Future(posts)
-
-      server.httpGet(
-        path = s"/user?limit=$limit",
-        andExpect = Ok,
-        withJsonBody = mapper.writeValueAsString(posts))
+      response.getStatusCode() shouldEqual 200
+      posts.length shouldEqual 2
+      posts.head.added should be > posts(1).added
     }
 
     "return bad request if limit is invalid" in {
-      server.httpGet(
-        path = "/user?limit=200",
-        andExpect = BadRequest)
+
+      Given("the the maximum limit for posts is 100")
+
+      When("a request is made for 200 posts")
+      val response = server.httpGet(path = "/post?limit=200", andExpect = BadRequest)
+
+      Then("A bad request response is returned with a limit error")
+      response.getStatusCode() shouldBe 400
+      response.getContentString() should include ("limit")
     }
 
     "create a new post" in {
-      postDao.save(any) returns Future(1)
 
-      val res: Response = server.httpPost(
-        path = "/user",
+      Given("a user exists with rights to create a post")
+      persistUsers(Seq(adminUser))
+
+      Given("the user has authenticated with the api")
+      val token = loginUserAndGetSessionToken()
+
+      When("The api receives a POST request with a valid post")
+      val response = server.httpPost(path = "/post",
+        headers = Map("Cookie" -> token),
         postBody =
           """
              {"title": "some post title"}
           """,
-        andExpect = Ok
-      )
-      res.getContentString() should include("some post title")
+        andExpect = Created)
+
+      Then("the post is created and returned")
+      response.getStatusCode() shouldBe 201
+      val content = response.getContentString()
+      val post = objectMapper.readValue[Post](content)
+      post.title shouldBe "some post title"
     }
   }
 }

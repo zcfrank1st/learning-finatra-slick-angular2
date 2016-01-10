@@ -1,6 +1,6 @@
 package com.tapatron.security
 
-import com.tapatron.persistence.User
+import com.tapatron.domain.User
 import com.twitter.inject.TwitterModule
 import com.twitter.inject.requestscope.RequestScopeBinding
 

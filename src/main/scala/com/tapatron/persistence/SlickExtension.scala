@@ -18,11 +18,10 @@ object SlickExtension {
     d => d.toLocalDate
   )
 
-
   implicit val UserPermissionMapper = MappedColumnType.base[Permissions, String](
     userPermission => userPermission.permissions.mkString(","),
     permissionList => {
-      val asSeq: Seq[Permission] = permissionList.split(",").toSeq.map(Permission.valueOf)
+      val asSeq: Seq[Permission] = permissionList.split(",").toSeq.map(Permission.fromString)
       new Permissions(asSeq)
     }
   )

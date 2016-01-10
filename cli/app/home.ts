@@ -1,5 +1,6 @@
 import {Component, Inject} from "angular2/core";
 import {PostService} from "./service/post-service";
+import {Post} from "./service/dto/post";
 import {Location, ROUTER_DIRECTIVES, ROUTER_PROVIDERS} from "angular2/router";
 
 
@@ -27,11 +28,5 @@ export class Home {
                 () => {},
                 () => {}
             );
-    }
-}
-
-class Post {
-    constructor(title:string) {
-
     }
 }

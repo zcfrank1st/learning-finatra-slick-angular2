@@ -1,8 +1,8 @@
 package com.tapatron.security
 
-import org.scalatest.{FlatSpec, GivenWhenThen}
+import org.scalatest.FlatSpec
 
-class SecurityUtilsTest extends FlatSpec with GivenWhenThen {
+class SecurityUtilsTest extends FlatSpec {
 
   behavior of "Security test utilities"
 
@@ -20,7 +20,7 @@ class SecurityUtilsTest extends FlatSpec with GivenWhenThen {
 
     val creds = SecurityUtils.credentialsFromAuthHeader(headerJunk)
 
-    assert(creds.isEmpty === true)
+    assert(creds.isDefined === false)
   }
 
 

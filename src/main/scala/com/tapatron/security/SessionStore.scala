@@ -3,7 +3,7 @@ package com.tapatron.security
 import java.util.concurrent.{ConcurrentHashMap => JConcurrentHashMap}
 import java.util.{Map => JMap}
 
-import com.tapatron.persistence.User
+import com.tapatron.domain.User
 
 import scala.collection.JavaConversions.asScalaSet
 
