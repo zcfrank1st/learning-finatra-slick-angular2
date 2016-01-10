@@ -26,4 +26,8 @@ object SecurityUtils {
       }
     }
   }
+
+  def authHeaderFromCredentials(credentials: Credentials): String = {
+    "Basic " + Base64.encode(s"${credentials.username}:${credentials.password}")
+  }
 }

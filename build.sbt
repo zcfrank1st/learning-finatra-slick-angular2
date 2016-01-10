@@ -1,4 +1,5 @@
-name := "finatra-learning"
+
+name := "zinternetz"
 organization := "com.tapatron"
 
 version := "0.0.1-SNAPSHOT"
@@ -13,9 +14,10 @@ javaOptions ++= Seq(
 
 resolvers ++= Seq(
   Resolver.sonatypeRepo("releases"),
-  "Twitter Maven" at "https://maven.twttr.com",
-  "Yatspec" at "http://repo.bodar.com/"
+  "Twitter Maven" at "https://maven.twttr.com"
 )
+
+(testOptions in Test) += Tests.Argument("-h", "target/html-test-report", "-o")
 
 lazy val versions = new {
   val finatra = "2.1.2"
@@ -24,10 +26,9 @@ lazy val versions = new {
   val mockito = "1.9.5"
   val postgres = "9.1-901-1.jdbc4"
   val scalatest = "2.2.3"
-  val scalaz = "7.2.0"
   val slick = "3.1.1"
   val specs2 = "2.3.12"
-  val typesafeConfig = "1.2.1"
+  val typesafeConfig = "1.3.0"
 }
 
 libraryDependencies ++= Seq(
@@ -43,7 +44,7 @@ libraryDependencies ++= Seq(
   "ch.qos.logback" % "logback-classic" % versions.logback % "test",
 
   "com.twitter.finatra" %% "finatra-http" % versions.finatra % "test",
-  "com.twitter.finatra" %% "finatra-jackson" % versions.finatra % "test",
+  "com.twitter.finatra" %% "finatra-jackson" % versions.finatra % "test" classifier "tests",
   "com.twitter.inject" %% "inject-server" % versions.finatra % "test",
   "com.twitter.inject" %% "inject-app" % versions.finatra % "test",
   "com.twitter.inject" %% "inject-core" % versions.finatra % "test",

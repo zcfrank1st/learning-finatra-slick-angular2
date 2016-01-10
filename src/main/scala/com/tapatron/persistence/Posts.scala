@@ -7,7 +7,10 @@ import javax.inject.{Singleton, Inject}
 import com.fasterxml.jackson.annotation.JsonProperty
 import slick.driver.PostgresDriver.api._
 
-case class Post(id: UUID = randomUUID(), title: String, added: Long, @JsonProperty("user_id") userId: UUID) extends Entity
+case class Post(id: UUID = randomUUID(),
+                title: String,
+                added: Long,
+                @JsonProperty("user_id") userId: UUID) extends Entity
 
 final class Posts(tag: Tag) extends Table[Post](tag, "posts") with EntityKey {
   def id = column[UUID]("id", O.PrimaryKey)

@@ -39,13 +39,31 @@ class PostsFeatureTest extends AppFeatureTest {
       response.getContentString() should include ("limit")
     }
 
+    "delete a post" in {
+
+      Given("a post is stored in the database")
+      And("and a user has rights to delete the post ")
+      persistPosts(Seq(sportsPost), byUser = adminUser)
+
+      Given("the user has authenticated with the api")
+      val token = loginUserAndGetSessionToken(adminUser)
+
+      When("The api receives a POST request with a valid post")
+      val response = server.httpDelete(path = s"/post/${sportsPost.id}",
+        headers = Map("Cookie" -> token),
+        andExpect = Ok)
+
+      Then("the post is deleted")
+      response.getStatusCode() shouldBe 200
+    }
+
     "create a new post" in {
 
       Given("a user exists with rights to create a post")
       persistUsers(Seq(adminUser))
 
       Given("the user has authenticated with the api")
-      val token = loginUserAndGetSessionToken()
+      val token = loginUserAndGetSessionToken(adminUser)
 
       When("The api receives a POST request with a valid post")
       val response = server.httpPost(path = "/post",

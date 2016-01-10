@@ -2,7 +2,7 @@ package com.tapatron
 
 import com.tapatron.common.json.CustomJacksonModule
 import com.tapatron.controller.{PostController, UserController}
-import com.tapatron.security.{AuthModule, CorsFilter, UserFilter}
+import com.tapatron.security.{AuthFilter, AuthModule, CorsFilter, AuthFilter$}
 import com.twitter.finagle.http.{Request, Response}
 import com.twitter.finatra.http.HttpServer
 import com.twitter.finatra.http.filters.CommonFilters
@@ -15,7 +15,7 @@ import com.typesafe.config.{ConfigFactory, Config}
 object ServerMain extends Server
 
 class Server extends HttpServer {
-  val config = ConfigFactory.load("application.conf")
+  val config = ConfigFactory.load()
 
   override def jacksonModule = CustomJacksonModule
 
@@ -29,7 +29,7 @@ class Server extends HttpServer {
       .filter[TraceIdMDCFilter[Request, Response]]
       .filter[CommonFilters]
       .filter[FinagleRequestScopeFilter[Request, Response]]
-      .filter[UserFilter]
+      .filter[AuthFilter]
       .filter[CorsFilter]
       .add[UserController]
       .add[PostController]

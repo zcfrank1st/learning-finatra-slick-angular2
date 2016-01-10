@@ -7,8 +7,10 @@ import com.ninja_squad.dbsetup.operation.Insert
 import com.tapatron.Server
 import com.tapatron.common.DbSetupOperations
 import com.tapatron.common.json.{LocalDateSerializer, LocalDateTimeSerializer}
+import com.tapatron.controller.Credentials
 import com.tapatron.domain.User
 import com.tapatron.persistence.Post
+import com.tapatron.security.SecurityUtils
 import com.twitter.finagle.http.Status._
 import com.twitter.finatra.http.test.{EmbeddedHttpServer, HttpTest}
 import com.twitter.inject.Mockito
@@ -16,7 +18,7 @@ import com.twitter.inject.server.FeatureTest
 import com.typesafe.config.{Config, ConfigFactory}
 import org.scalatest.{BeforeAndAfterEach, GivenWhenThen}
 
-class AppFeatureTest extends FeatureTest with Mockito with HttpTest with BeforeAndAfterEach with GivenWhenThen {
+abstract class AppFeatureTest extends FeatureTest with Mockito with HttpTest with BeforeAndAfterEach with GivenWhenThen {
 
   override val server = new EmbeddedHttpServer(new Server)
 
@@ -43,9 +45,10 @@ class AppFeatureTest extends FeatureTest with Mockito with HttpTest with BeforeA
     insert(DbSetupOperations.insertPosts(posts))
   }
 
-  protected def loginUserAndGetSessionToken(): String = {
+  protected def loginUserAndGetSessionToken(user: User): String = {
+    val authHeader = SecurityUtils.authHeaderFromCredentials(Credentials(user.username, user.password))
     val response = server.httpPost(path = "/login",
-      headers = Map("Authorization" -> "Basic c3RlaW46cGFzc3dvcmQ="),
+      headers = Map("Authorization" -> authHeader),
       postBody = "",
       andExpect = Ok)
 

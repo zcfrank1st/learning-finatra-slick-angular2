@@ -23,7 +23,7 @@ class PostService @Inject()(postDao: PostsDao) {
     val outcome = new Promise[Either[Error, Post]]
 
     if (user.hasPermissionTo(CREATE_POSTS)) {
-      val post = Post(randomUUID(), title, new Date().getTime, UUID.fromString("ad2d5e58-12d9-4857-a952-c4e4be44caf3"))
+      val post = Post(randomUUID(), title, new Date().getTime, user.id)
       postDao.save(post).onComplete {
         case Success(_) => outcome.setValue(Right(post))
         case Failure(t) => outcome.setException(t)
