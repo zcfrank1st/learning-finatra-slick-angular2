@@ -25,7 +25,6 @@ lazy val versions = new {
   val postgres = "9.1-901-1.jdbc4"
   val scalatest = "2.2.3"
   val scalaz = "7.2.0"
-  val shiro = "1.2.4"
   val slick = "3.1.1"
   val specs2 = "2.3.12"
   val typesafeConfig = "1.2.1"
@@ -42,13 +41,9 @@ libraryDependencies ++= Seq(
   "postgresql" % "postgresql" % versions.postgres,
   "com.typesafe" % "config" % versions.typesafeConfig,
   "ch.qos.logback" % "logback-classic" % versions.logback % "test",
-  "org.scalaz" %% "scalaz-core" % versions.scalaz,
-  "org.apache.shiro" % "shiro-core" % versions.shiro,
-  "org.apache.shiro" % "shiro-web" % versions.shiro,
-  "org.apache.shiro" % "shiro-guice" % versions.shiro,
 
   "com.twitter.finatra" %% "finatra-http" % versions.finatra % "test",
-  "com.twitter.finatra" %% "finatra-jackson" % versions.finatra % "test" classifier "tests",
+  "com.twitter.finatra" %% "finatra-jackson" % versions.finatra % "test",
   "com.twitter.inject" %% "inject-server" % versions.finatra % "test",
   "com.twitter.inject" %% "inject-app" % versions.finatra % "test",
   "com.twitter.inject" %% "inject-core" % versions.finatra % "test",
