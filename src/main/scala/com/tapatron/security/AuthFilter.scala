@@ -23,8 +23,8 @@ object AuthFilter {
     )
   }
 
-  def sessionTokenFrom(cookies: CookieMap): Option[String] = {
+  def sessionTokenFrom(cookies: CookieMap): Option[Token] = {
     val sessionTokenCookie: Option[Cookie] = cookies.get(Cookies.SessionTokenName)
-    sessionTokenCookie.map(cookie => cookie.value)
+    sessionTokenCookie.map(cookie => Token(cookie.value))
   }
 }

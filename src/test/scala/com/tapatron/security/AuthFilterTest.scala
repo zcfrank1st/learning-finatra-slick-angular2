@@ -13,7 +13,7 @@ class AuthFilterTest extends FunSuite with Matchers with MockitoSugar {
 
     val token = AuthFilter.sessionTokenFrom(cookies)
 
-    token.get shouldBe "5151"
+    token.get shouldBe Token("5151")
   }
 
   test("returns None if the cookies do not contain the token") {

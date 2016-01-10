@@ -5,27 +5,17 @@ import java.util.{Map => JMap}
 
 import com.tapatron.domain.User
 
-import scala.collection.JavaConversions.asScalaSet
-
 class SessionStore {
-  val tokens: JMap[User, String] = new JConcurrentHashMap[User, String]()
 
-  def isAuthenticated(userId: String, tokenUnderTest: String): Boolean = {
-    Option(tokens.get(userId)).contains(tokenUnderTest)
+  val tokens: JMap[Token, User] = new JConcurrentHashMap[Token, User]()
+
+  def addToken(token: Token, user: User) = {
+    tokens.put(token, user)
   }
 
-  def addToken(user: User, token: String) = {
-    tokens.put(user, token)
-  }
+  def resolveUserFrom(token: Token): Option[User] = Option(tokens.get(token))
 
-  def resolveUserFrom(token: String): Option[User] = {
-    asScalaSet(tokens.entrySet())
-      .filter(entry => entry.getValue == token)
-      .map(entry => entry.getKey)
-      .headOption
-  }
-
-  def removeToken(token: String) = {
-    tokens.values.remove(token)
+  def removeToken(token: Token) = {
+    tokens.remove(token)
   }
 }
