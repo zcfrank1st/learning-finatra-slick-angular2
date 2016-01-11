@@ -18,7 +18,7 @@ import com.twitter.inject.server.FeatureTest
 import com.typesafe.config.{Config, ConfigFactory}
 import org.scalatest.{BeforeAndAfterEach, GivenWhenThen}
 
-abstract class AppFeatureTest extends FeatureTest with Mockito with HttpTest with BeforeAndAfterEach with GivenWhenThen {
+abstract class FeatureSpec extends FeatureTest with Mockito with HttpTest with BeforeAndAfterEach with GivenWhenThen {
 
   override val server = new EmbeddedHttpServer(new Server)
 

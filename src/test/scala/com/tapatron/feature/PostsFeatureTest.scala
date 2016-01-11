@@ -6,7 +6,7 @@ import com.tapatron.fixtures.UserFixtures.adminUser
 import com.tapatron.persistence.Post
 import com.twitter.finagle.http.Status._
 
-class PostsFeatureTest extends AppFeatureTest {
+class PostsFeatureTest extends FeatureSpec {
 
   "Post Controller " should {
 
