@@ -1,4 +1,4 @@
-# learning-finatra
+# learning-finatra-slick-angular2
 
 Putting together a web app for educational purposes. Stack:
 
