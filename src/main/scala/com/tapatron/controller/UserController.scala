@@ -1,20 +1,22 @@
 package com.tapatron.controller
 
+import java.util.UUID
 import javax.inject.Inject
 
 import com.google.inject.Provider
-import com.tapatron.domain.User
-import com.tapatron.security.Cookies.SessionTokenName
+import com.tapatron.error.UnauthorizedError
 import com.tapatron.security.SecurityUtils.credentialsFromAuthHeader
-import com.tapatron.security.{Cookies, SessionStore, Token}
+import com.tapatron.security.{EncryptedSessionCookie, SessionID, SessionService, Sessions}
 import com.tapatron.service.UserService
 import com.twitter.finagle.http.Request
 import com.twitter.finatra.http.Controller
 import com.twitter.finatra.request.Header
-import com.twitter.util.Future
+import com.twitter.inject.Logging
+import org.jboss.netty.handler.codec.http.DefaultCookie
 
-class UserController @Inject()(sessionStore: SessionStore, userService: UserService, subject: Provider[Option[User]]) extends Controller {
-
+class UserController @Inject()(userService: UserService,
+                               sessionService: SessionService,
+                               subject: Provider[Option[UUID]]) extends Controller with Logging {
   get("/user") { request: Request =>
     subject.get().map { user =>
       userService.users()
@@ -23,31 +25,26 @@ class UserController @Inject()(sessionStore: SessionStore, userService: UserServ
     }.toFuture
   }
 
-  // TODO move bulk of this into service, http stuff should stay in this layer
-  // TODO tests
-
   post("/login") { request: LoginRequest =>
-    val creds: Option[Credentials] = credentialsFromAuthHeader(request.Authorization)
-    creds.map { headerCreds => {
-        val userLookup: Future[Option[User]] = userService.findOne(headerCreds.username, headerCreds.password)
-        userLookup.map {
-          case Some(user) =>
-            val token = Token.generate()
-            sessionStore.addToken(token, user)
-            response.ok.cookie(SessionTokenName, token.underlying)
-          case None => response.unauthorized
-        }
+    credentialsFromAuthHeader(request.Authorization).map { credentials => {
+      sessionService.login(credentials).map { sessionID =>
+        val cookie = new DefaultCookie(Sessions.SessionIdName, sessionID.value)
+        response.ok().cookie(cookie)
+      } rescue {
+        case UnauthorizedError(message) =>
+          debug(message)
+          response.unauthorized.toFutureException
+        case _ => response.internalServerError.toFutureException
       }
-    } getOrElse {
-      response.unauthorized.toFuture
     }
+    }.getOrElse(response.unauthorized.toFuture)
   }
 
   post("/logout") { request: Request =>
-    request.cookies.get(SessionTokenName).map {
-      cookie => sessionStore.removeToken(Token(cookie.value))
+    request.cookies.get(Sessions.SessionIdName).foreach {
+      cookie => sessionService.logout(EncryptedSessionCookie(cookie.value))
     }
-    response.ok.cookie(Cookies.ExpiredCookie).toFuture
+    response.ok().cookie(Sessions.ExpiredSessionCookie).toFuture
   }
 }
 

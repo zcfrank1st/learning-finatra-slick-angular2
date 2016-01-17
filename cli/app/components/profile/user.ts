@@ -1,6 +1,6 @@
 
 import {Component, Inject} from "angular2/core";
-import {UserService} from "./service/user-service";
+import {UserService} from "../../service/user-service";
 
 @Component({
     template:

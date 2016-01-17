@@ -1,10 +1,10 @@
 package com.tapatron.service
 
+import java.util.UUID
 import javax.inject.{Singleton, Inject}
 
 import com.tapatron.common.TwitterConverters._
-import com.tapatron.domain.User
-import com.tapatron.persistence.UsersDao
+import com.tapatron.domain.{UsersDao, User}
 import com.twitter.util.Future
 import scala.concurrent.ExecutionContext.Implicits.global
 
@@ -15,9 +15,9 @@ class UserService @Inject()(usersDao: UsersDao) {
 
   def users(): Future[Seq[User]] = usersDao.findAll(MaxValue)
 
-  def findOne(username: String, password: String): Future[Option[User]] = {
-    usersDao.findByUsernameAndPassword(username, password).map { users =>
-      users.headOption
-    }
-  }
+  def findOne(username: String, password: String): Future[Option[User]] =
+    usersDao.findByUsernameAndPassword(username, password)
+      .map(users => users.headOption)
+
+  def findByID(id: UUID): Future[Option[User]] = usersDao.findById(id)
 }

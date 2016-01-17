@@ -1,9 +1,8 @@
-package com.tapatron.persistence
+package com.tapatron.domain
 
 import java.sql.{Date, Timestamp}
 import java.time.{LocalDate, LocalDateTime, ZoneOffset}
 
-import com.tapatron.domain.{Permission, Permissions}
 import slick.driver.PostgresDriver.api._
 
 object SlickExtension {

@@ -1,4 +1,4 @@
-<form (ngSubmit)="onSubmit()" #loginForm="ngForm">
+<form (ngSubmit)="login()" #loginForm="ngForm">
     <div class="form-group">
         <label for="name">Username</label>
         <input type="text" class="form-control" required
@@ -21,4 +21,13 @@
 
     <button type="submit" class="btn btn-default"
             [disabled]="!loginForm.form.valid">Submit</button>
+    <div *ngIf="authError" class="text-danger">
+        Invalid credentials
+    </div>
+    <br>
+
+    <a href="/signup">Click here to signup</a>
 </form>
+
+<button (click)="logout()">Logout</button>
+

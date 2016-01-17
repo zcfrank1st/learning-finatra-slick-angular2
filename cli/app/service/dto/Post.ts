@@ -1,5 +1,6 @@
+
 export class Post {
-    constructor(title:string) {
+    constructor(public title:string) {
 
     }
 }

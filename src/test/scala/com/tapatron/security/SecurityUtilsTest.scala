@@ -1,8 +1,11 @@
 package com.tapatron.security
 
-import org.scalatest.FlatSpec
+import org.junit.runner.RunWith
+import org.scalatest.junit.JUnitRunner
+import org.scalatest.{Matchers, FlatSpec}
 
-class SecurityUtilsTest extends FlatSpec {
+@RunWith(classOf[JUnitRunner])
+class SecurityUtilsTest extends FlatSpec with Matchers {
 
   behavior of "Security test utilities"
 
@@ -23,6 +26,12 @@ class SecurityUtilsTest extends FlatSpec {
     assert(creds.isDefined === false)
   }
 
+  it should "sign the session ID with the provided secret" in {
+    val key = "6e111ba6-ce0e-4656-b8d9-958dc546c2a2"
 
+    val signedSessionID = SecurityUtils.generateHmac(key)
+
+    signedSessionID shouldBe "aaf689662fd346e4545daa61f197610982eb1900"
+  }
 
 }

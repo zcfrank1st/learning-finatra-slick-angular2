@@ -4,8 +4,7 @@ import java.util.UUID.randomUUID
 import java.util.{Date, UUID}
 
 import com.tapatron.domain.Permission.{CREATE_POSTS, SUPER}
-import com.tapatron.domain.{Permissions, User}
-import com.tapatron.persistence.Post
+import com.tapatron.domain.{Post, Permissions, User}
 
 object Common {
   val userId = UUID.fromString("ad2d5e58-12d9-4857-a952-c4e4be44caf3")

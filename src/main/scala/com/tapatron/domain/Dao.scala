@@ -1,4 +1,4 @@
-package com.tapatron.persistence
+package com.tapatron.domain
 
 import java.util.UUID
 
@@ -25,6 +25,11 @@ class GenericDao[T <: Entity, U <: Table[T] with EntityKey](val table: TableQuer
 
   def findAll(limit: Int): Future[Seq[Record]] = {
     db.run(table.take(limit).result)
+  }
+
+  def findById(id: UUID): Future[Option[Record]] = {
+    val query = table.filter(_.id === id)
+    db.run(query.result.headOption)
   }
 
   def delete(id: UUID): Future[Int] = {

@@ -1,13 +1,19 @@
 package com.tapatron.error
 
-abstract class Error(val reason: String, val status: Int) extends Exception
+abstract class Error(val reason: String, val cause: Throwable) extends Exception(reason, cause)
 
-final case class BadCredentialsError(override val reason: String) extends Error(reason, 400)
+final case class BadCredentialsError(override val reason: String,
+                                     override val cause: Throwable) extends Error(reason, cause)
 
-final case class NotFoundError(override val reason: String) extends Error(reason, 404)
+final case class NotFoundError(override val reason: String) extends Error(reason, null)
 
-final case class UnauthorizedError(override val reason: String) extends Error(reason, 403)
+final case class UnauthorizedError(override val reason: String) extends Error(reason, null)
 
-final case class AuthenticationError(override val reason: String) extends Error(reason, 401)
+final case class AuthenticationError(override val reason: String,
+                                     override val cause: Throwable) extends Error(reason, cause)
 
-final case class ServerError(override val reason: String) extends Error(reason, 500)
+final case class ServerError(override val reason: String,
+                             override val cause: Throwable) extends Error(reason, cause)
+
+final case class BadSessionCookieError(override val reason: String,
+                                       override val cause: Throwable) extends Error(reason, cause)

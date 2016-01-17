@@ -1,16 +1,19 @@
 package com.tapatron.feature
 
 import com.tapatron.common.TestUtils.objectMapper
+import com.tapatron.domain.Post
 import com.tapatron.fixtures.PostFixtures._
 import com.tapatron.fixtures.UserFixtures.adminUser
-import com.tapatron.persistence.Post
 import com.twitter.finagle.http.Status._
+import org.junit.runner.RunWith
+import org.scalatest.junit.JUnitRunner
 
+@RunWith(classOf[JUnitRunner])
 class PostsFeatureTest extends FeatureSpec {
 
-  "Post Controller " should {
+  "Post Controller" should {
 
-    "return the posts " in {
+    "return the posts" in {
 
       Given("three posts exist in the database")
       persistPosts(Seq(sportsPost, politicsPost, environmentPost), byUser = adminUser)
@@ -79,6 +82,29 @@ class PostsFeatureTest extends FeatureSpec {
       val content = response.getContentString()
       val post = objectMapper.readValue[Post](content)
       post.title shouldBe "some post title"
+    }
+
+    "update an existing post" in {
+      Given("a post is stored in the database")
+      And("and a user has rights to modify the post ")
+      persistPosts(Seq(sportsPost), byUser = adminUser)
+
+      Given("the user has authenticated with the api")
+      val token = loginUserAndGetSessionToken(adminUser)
+
+      When("The api receives a POST request with a valid post")
+      val response = server.httpPut(path = s"/post/${sportsPost.id}",
+        putBody =
+          """
+             {"title": "updated title"}
+          """,
+        headers = Map("Cookie" -> token))
+
+      Then("the post is updated")
+      response.getStatusCode() shouldBe 200
+      val content = response.getContentString()
+      val post = objectMapper.readValue[Post](content)
+      post.title shouldBe "updated title"
     }
   }
 }

@@ -4,9 +4,7 @@ import java.util.UUID
 import javax.inject.{Inject, Singleton}
 
 import com.google.inject.Provider
-import com.tapatron.domain.User
-import com.tapatron.error.Error
-import com.tapatron.persistence.Post
+import com.tapatron.domain.Post
 import com.tapatron.service.PostService
 import com.twitter.finagle.http.Status
 import com.twitter.finatra.http.Controller
@@ -15,16 +13,17 @@ import com.twitter.finatra.validation.{Max, Min, NotEmpty}
 import com.twitter.util.Future
 
 @Singleton
-class PostController @Inject()(postService: PostService, subject: Provider[Option[User]]) extends Controller {
+class PostController @Inject()(postService: PostService, subject: Provider[Option[UUID]]) extends Controller {
 
   get("/post") { request: GetPostsRequest =>
-    postService.posts(request.limit)
+    val outcome = postService.posts(request.limit)
+    ResponseHandler.create(outcome, response)
   }
 
   post("/post") { request: CreatePostRequest =>
     subject.get().map { user =>
-      val serviceOutcome: Future[Either[Error, Post]] = postService.create(request.title, user)
-      ResponseCreator.create(serviceOutcome, response, Status.Created)
+      val serviceOutcome: Future[Post] = postService.create(request.title, user)
+      ResponseHandler.create(serviceOutcome, response, Status.Created)
     } getOrElse {
       response.unauthorized
     }.toFuture
@@ -32,8 +31,8 @@ class PostController @Inject()(postService: PostService, subject: Provider[Optio
 
   delete("/post/:id") { request: DeletePostRequest =>
     subject.get().map { user =>
-      val serviceOutcome: Future[Either[Error, Unit]] = postService.deleteById(request.id)
-      ResponseCreator.create(serviceOutcome, response, Status.Ok)
+      val serviceOutcome: Future[Unit] = postService.deleteById(request.id)
+      ResponseHandler.create(serviceOutcome, response)
     } getOrElse {
       response.unauthorized
     }.toFuture
@@ -41,7 +40,8 @@ class PostController @Inject()(postService: PostService, subject: Provider[Optio
 
   put("/post/:id") { request: UpdatePostRequest =>
     subject.get().map { user =>
-      postService.updateById(request.id, request.title)
+      val updatedPost: Future[Post] = postService.updateById(request.id, request.title)
+      ResponseHandler.create(updatedPost, response)
     } getOrElse {
       response.unauthorized
     }.toFuture

@@ -2,8 +2,7 @@ package com.tapatron.common
 
 import com.ninja_squad.dbsetup.Operations._
 import com.ninja_squad.dbsetup.operation.Insert
-import com.tapatron.domain.User
-import com.tapatron.persistence.Post
+import com.tapatron.domain.{Post, User}
 
 object DbSetupOperations {
   val DeleteAll = deleteAllFrom("posts", "users")

@@ -16,30 +16,18 @@ export class UserService {
         };
     }
 
-    getAll():Observable<any> {
+    getAll():Observable<Response> {
         return this.http.get(`${this.apiUrl}/user`);
     }
 
-    logout():Observable<any> {
+    logout():Observable<Response> {
         return this.http.post(`${this.apiUrl}/logout`, '');
     }
 
-    login(username:string, password:string) {
+    login(username:string, password:string):Observable<Response> {
         const headers = new Headers();
         headers.append("Authorization", UserService.encodeCredentials(username, password));
-
-        this.http.post(`${this.apiUrl}/login`, '', {headers: headers})
-            .subscribe(
-                res => console.log(res),
-                err => {
-                    if (err.status === 401) {
-                        console.log("unauthorized")
-                    } else {
-                        console.log("error")
-                    }
-                },
-                ()  => {}
-            );
+        return this.http.post(`${this.apiUrl}/login`, '', {headers: headers});
     }
 
     static encodeCredentials(username:string, password:string):string {

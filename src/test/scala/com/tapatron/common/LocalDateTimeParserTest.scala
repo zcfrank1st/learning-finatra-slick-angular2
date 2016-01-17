@@ -5,8 +5,11 @@ import java.time.LocalDateTime
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.module.SimpleModule
 import com.tapatron.common.json.LocalDateTimeSerializer
+import org.junit.runner.RunWith
 import org.scalatest.FreeSpec
+import org.scalatest.junit.JUnitRunner
 
+@RunWith(classOf[JUnitRunner])
 class LocalDateTimeParserTest extends FreeSpec {
   val mapper = new ObjectMapper()
   val module = new SimpleModule()

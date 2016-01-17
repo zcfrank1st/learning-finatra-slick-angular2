@@ -2,6 +2,8 @@
 import {Component} from "angular2/core";
 import {PostService} from "./service/post-service";
 import {Inject} from "angular2/core";
+import {Post} from "./service/dto/post";
+import {Router} from "angular2/router";
 
 @Component({
     template: `
@@ -24,14 +26,18 @@ import {Inject} from "angular2/core";
 export class Create {
     model = new FormModel();
     private postService:PostService;
+    private router:Router;
 
-    constructor(@Inject(PostService) postService:PostService) {
+    constructor(@Inject(PostService) postService:PostService, router: Router) {
         this.postService = postService;
-
+        this.router = router;
     }
 
     onSubmit() {
-
+        let post = new Post(this.model.title);
+        this.postService.create(post)
+            .map(response => response.json())
+            .subscribe(post => this.router.navigate(['Home']));
     }
 }
 

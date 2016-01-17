@@ -1,8 +1,8 @@
 import {Inject, Component} from 'angular2/core';
-import {Login} from "./login-form";
-import {RouteConfig, Location, ROUTER_DIRECTIVES, ROUTER_PROVIDERS} from "angular2/router";
-import {Home} from "./home";
-import {Profile} from "./user";
+import {Login} from "./components/login/login-form";
+import {RouteConfig, Router, ROUTER_DIRECTIVES, ROUTER_PROVIDERS} from "angular2/router";
+import {Home} from "./components/home/home";
+import {Profile} from "./components/profile/user";
 import {UserService} from "./service/user-service";
 import {Create} from "./create";
 
@@ -28,12 +28,12 @@ import {Create} from "./create";
 ])
 export class AppComponent {
     private userService:UserService;
-    private location:Location;
+    private router:Router;
 
-    constructor(@Inject(UserService) userService:UserService,
-                @Inject(Location) location:Location) {
+    constructor(userService:UserService,
+                router: Router) {
         this.userService = userService;
-        this.location = location;
+        this.router = router;
     }
 
     logout() {
@@ -41,9 +41,6 @@ export class AppComponent {
             .subscribe(
                 () => {},
                 () => {},
-                () => {
-                    this.location.go("/home");
-                }
-            );
+                () => this.router.navigate(['Home']));
     }
 }

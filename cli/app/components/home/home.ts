@@ -1,8 +1,7 @@
 import {Component, Inject} from "angular2/core";
-import {PostService} from "./service/post-service";
-import {Post} from "./service/dto/post";
+import {PostService} from "../../service/post-service";
+import {Post} from "../../service/dto/post";
 import {Location, ROUTER_DIRECTIVES, ROUTER_PROVIDERS} from "angular2/router";
-
 
 @Component({
     template: `<ul>
@@ -23,10 +22,6 @@ export class Home {
 
         this.postService.getAll()
             .map(response => response.json())
-            .subscribe(
-                posts => this.posts = posts,
-                () => {},
-                () => {}
-            );
+            .subscribe(posts => this.posts = posts);
     }
 }
