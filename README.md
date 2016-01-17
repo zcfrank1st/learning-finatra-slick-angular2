@@ -1,3 +1,7 @@
 # learning-finatra
 
-Putting together a [finatra](https://twitter.github.io/finatra/) web app for educational purposes. Depends on [slick](http://slick.typesafe.com/) for persistence.
+Putting together a web app for educational purposes. Stack:
+
+* REST api - [finatra](https://twitter.github.io/finatra/)
+* Persistence - [slick](http://slick.typesafe.com/) 
+* Client - [angular2](https://angular.io/)
