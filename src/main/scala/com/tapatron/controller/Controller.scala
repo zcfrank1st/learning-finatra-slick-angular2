@@ -1,14 +1,27 @@
 package com.tapatron.controller
 
+import java.util.UUID
+
+import com.google.inject.Provider
 import com.tapatron.error.{ServerError, UnauthorizedError}
 import com.twitter.finagle.http.{Response, Status}
 import com.twitter.finatra.http.response.ResponseBuilder
-import com.twitter.inject.Logging
+import com.twitter.finatra.http.{Controller => TwitterController}
 import com.twitter.util.Future
 
-object ResponseHandler extends Logging {
+class Controller(subject: Provider[Option[UUID]]) extends TwitterController {
 
-  def create(outcome: Future[_], responseBuilder: ResponseBuilder, status: Status = Status.Ok): Future[Response] = {
+  def requireUser(f: UUID => Future[Response]) = {
+    subject.get().map { user =>
+      f.apply(user)
+    } getOrElse {
+      response.unauthorized
+    }.toFuture
+  }
+
+  def requireAdmin(f: UUID => Future[Response]) = ???
+
+  def toResponse(outcome: Future[_], responseBuilder: ResponseBuilder, status: Status = Status.Ok): Future[Response] = {
     outcome flatMap { result =>
       status match {
         case Status.Ok => responseBuilder.ok(result).toFuture

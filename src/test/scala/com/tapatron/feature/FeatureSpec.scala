@@ -39,6 +39,8 @@ abstract class FeatureSpec extends FeatureTest with Mockito with HttpTest with B
 
   protected def persistUsers(users: Seq[User]): Unit = insert(DbSetupOperations.insertUsers(users))
 
+  protected def persistUsers(users: User): Unit = insert(DbSetupOperations.insertUsers(Seq(users)))
+
   protected def persistPosts(posts: Seq[Post], byUser: User): Unit = {
     insert(DbSetupOperations.insertUsers(Seq(byUser)))
     insert(DbSetupOperations.insertPosts(posts))
