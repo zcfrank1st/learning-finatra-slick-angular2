@@ -7,9 +7,9 @@
   </appender>
 
   <logger name="com.twitter" level="debug"/>
-  <logger name="com.tapatron" level="trace"/>
+  <logger name="com.tapatron" level="debug"/>
 
-  <root level="info">
+  <root level="DEBUG">
     <appender-ref ref="STDOUT"/>
   </root>
 </configuration>
