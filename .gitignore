@@ -10,3 +10,4 @@ classes/
 target/
 sbt-launch.jar
 *.dump
+*.rdb

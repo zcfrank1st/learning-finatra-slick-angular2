@@ -9,7 +9,8 @@ import com.twitter.inject.requestscope.FinagleRequestScope
 import com.twitter.util.Future
 
 /**
-  * Application CORS filter.  Currently allows
+  * Application CORS filter.  Currently uses [[Cors.UnsafePermissivePolicy]] but should be
+  * more constrained in production.
   */
 class CorsFilter @Inject()(requestScope: FinagleRequestScope) extends SimpleFilter[Request, Response] {
   val allowsOrigin  = { origin: String => Some(origin) }
