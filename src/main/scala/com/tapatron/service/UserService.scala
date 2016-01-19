@@ -15,9 +15,8 @@ class UserService @Inject()(usersDao: UsersDao) {
 
   def users(): Future[Seq[User]] = usersDao.findAll(MaxValue)
 
-  def findOne(username: String, password: String): Future[Option[User]] =
-    usersDao.findByUsernameAndPassword(username, password)
-      .map(users => users.headOption)
+  def findByUsername(username: String): Future[Option[User]] =
+    usersDao.findByUsername(username).map(users => users.headOption)
 
   def findByID(id: UUID): Future[Option[User]] = usersDao.findById(id)
 }

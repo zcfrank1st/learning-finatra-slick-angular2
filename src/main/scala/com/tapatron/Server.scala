@@ -1,7 +1,5 @@
 package com.tapatron
 
-import java.lang.Runtime.getRuntime
-
 import com.tapatron.common.json.CustomJacksonModule
 import com.tapatron.controller.{PostController, UserController}
 import com.tapatron.security.{AuthFilter, AuthModule, CorsFilter}
@@ -13,7 +11,6 @@ import com.twitter.finatra.logging.filter.{LoggingMDCFilter, TraceIdMDCFilter}
 import com.twitter.finatra.logging.modules.Slf4jBridgeModule
 import com.twitter.inject.requestscope.FinagleRequestScopeFilter
 import com.typesafe.config.ConfigFactory
-import com.zaxxer.hikari.HikariDataSource
 
 object ServerMain extends Server
 

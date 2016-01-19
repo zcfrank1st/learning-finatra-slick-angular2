@@ -17,7 +17,7 @@ CREATE TABLE posts (
 );
 
 INSERT INTO users (id, username, password, permissions) VALUES
-  ('9b235810-f8b9-4833-8031-93e47fe51b01', 'stein', 'password', 'EDIT_DATASETS,SUPER');
+  ('9b235810-f8b9-4833-8031-93e47fe51b01', 'stein', '$2a$10$.S9RyYDbxq.zjaPvfxYJI.xD9cXpaVMeLTpCaK71d7S0T4Bb0njme', 'EDIT_DATASETS,SUPER');
 
 INSERT INTO posts (id, title, added, user_id) VALUES
   ('a4848a9c-541b-453d-9ce5-febb255cb3c5', 'again!', 412351516, '9b235810-f8b9-4833-8031-93e47fe51b01'),

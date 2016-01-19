@@ -15,6 +15,7 @@ case class SessionID(value: String = UUID.randomUUID().toString) extends AnyVal
 case class EncryptedSessionCookie(value: String) extends AnyVal
 
 class SessionService @Inject()(crypto: Crypto,
+                               passwordCrypto: PasswordCrypto,
                                sessionStore: SessionStore,
                                userService: UserService) {
   /**
@@ -49,15 +50,20 @@ class SessionService @Inject()(crypto: Crypto,
   }
 
   def login(credentials: Credentials): Future[EncryptedSessionCookie] = {
-    userService.findOne(credentials.username, credentials.password).flatMap { optUser =>
+    userService.findByUsername(credentials.username).flatMap { optUser =>
       optUser.map(user => {
-        val (cookieContent, sessionID) = createSession()
-        sessionStore.put(sessionID, user.id)
-        Future.value(cookieContent)
-      }).getOrElse(Future.exception(UnauthorizedError(
-        s"Invalid credentials for user=${credentials.username} pass=${credentials.password}")))
+        if (passwordCrypto.checkPassword(user.password, credentials.password)) {
+          val (cookieContent, sessionID) = createSession()
+          sessionStore.put(sessionID, user.id)
+          Future.value(cookieContent)
+        } else {
+          Future.exception(UnauthorizedError(failureMessage(credentials)))
+        }
+      }).getOrElse(Future.exception(UnauthorizedError(failureMessage(credentials))))
     }
   }
+
+  private def failureMessage(credentials: Credentials) = s"Invalid credentials for user=${credentials.username} pass=${credentials.password}"
 
   /**
     * Creates a new session.  The session cookie content is hmac|session_id,

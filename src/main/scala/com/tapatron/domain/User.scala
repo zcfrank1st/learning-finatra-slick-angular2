@@ -40,8 +40,10 @@ final class Users(tag: Tag) extends Table[User](tag, "users") with EntityKey {
 
 @Singleton
 class UsersDao extends GenericDao[User, Users](Users.users) {
-  def findByUsernameAndPassword(username: String, password: String): Future[Seq[User]] = {
-    val query = table.filter(row => row.username === username && row.password === password)
+
+  def findByUsername(username: String): Future[Seq[User]] = {
+    val query = table.filter(row => row.username === username)
     db.run(query.result)
   }
+
 }
