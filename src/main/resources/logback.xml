@@ -13,11 +13,11 @@
         <appender-ref ref="STDOUT"/>
     </logger>
 
-    <logger name="slick.jdbc" level="info" additivity="false">
+    <logger name="slick.jdbc" level="DEBUG" additivity="false">
         <appender-ref ref="STDOUT"/>
     </logger>
 
-    <logger name="com.zaxxer.hikari" level="info" additivity="false">
+    <logger name="com.zaxxer.hikari" level="DEBUG" additivity="false">
         <appender-ref ref="STDOUT"/>
     </logger>
 

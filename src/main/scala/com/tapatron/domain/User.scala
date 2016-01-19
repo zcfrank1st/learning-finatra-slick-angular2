@@ -4,6 +4,7 @@ import java.util.UUID
 import java.util.UUID._
 import javax.inject.{Inject, Singleton}
 
+import com.tapatron.DB
 import slick.driver.PostgresDriver.api._
 import SlickExtension._
 
@@ -15,6 +16,10 @@ case class User(id: UUID = randomUUID(),
                 permissions: Permissions = new Permissions(Seq())) extends Entity {
 
   def hasPermissionTo(permission: Permission): Boolean = permissions.contains(permission)
+}
+
+object Users {
+  val users = TableQuery[Users]
 }
 
 final class Users(tag: Tag) extends Table[User](tag, "users") with EntityKey {
@@ -30,11 +35,11 @@ final class Users(tag: Tag) extends Table[User](tag, "users") with EntityKey {
 
   def * = (id, username, password, permissions) <>(User.tupled, User.unapply)
 
-  def user = foreignKey("posts_users_fk", userId, TableQuery[Users])(_.id)
+  def user = foreignKey("posts_users_fk", userId, Users.users)(_.id)
 }
 
 @Singleton
-class UsersDao @Inject()(db: Database) extends GenericDao[User, Users](TableQuery[Users], db) {
+class UsersDao extends GenericDao[User, Users](Users.users) {
   def findByUsernameAndPassword(username: String, password: String): Future[Seq[User]] = {
     val query = table.filter(row => row.username === username && row.password === password)
     db.run(query.result)

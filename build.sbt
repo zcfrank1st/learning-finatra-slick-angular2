@@ -43,7 +43,6 @@ libraryDependencies ++= Seq(
   "postgresql" % "postgresql" % versions.postgres,
   "com.typesafe" % "config" % versions.typesafeConfig,
   "net.debasishg" %% "redisclient" % versions.redisVersion,
-  "org.scala-lang" %% "scala-pickling" % "0.9.1",
   "com.github.t3hnar" %% "scala-bcrypt" % "2.5",
   "org.jasypt" % "jasypt" % "1.9.2",
   "ch.qos.logback" % "logback-classic" % versions.logback % "test",

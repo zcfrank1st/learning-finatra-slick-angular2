@@ -15,9 +15,9 @@ import com.twitter.finatra.http.test.{EmbeddedHttpServer, HttpTest}
 import com.twitter.inject.Mockito
 import com.twitter.inject.server.FeatureTest
 import com.typesafe.config.{Config, ConfigFactory}
-import org.scalatest.{BeforeAndAfterEach, GivenWhenThen}
+import org.scalatest.{BeforeAndAfterAll, BeforeAndAfterEach, GivenWhenThen}
 
-abstract class FeatureSpec extends FeatureTest with Mockito with HttpTest with BeforeAndAfterEach with GivenWhenThen {
+abstract class FeatureSpec extends FeatureTest with Mockito with HttpTest with BeforeAndAfterEach with BeforeAndAfterAll with GivenWhenThen {
 
   override val server = new EmbeddedHttpServer(new Server)
 
@@ -34,6 +34,10 @@ abstract class FeatureSpec extends FeatureTest with Mockito with HttpTest with B
   })
 
   override def beforeEach() = clearDatabase()
+
+  override def afterAll() = {
+    dbConfig.getConnection.close()
+  }
 
   protected def clearDatabase(): Unit = new DbSetup(dbConfig, DbSetupOperations.DeleteAll).launch()
 

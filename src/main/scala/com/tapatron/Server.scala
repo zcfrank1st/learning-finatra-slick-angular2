@@ -1,8 +1,10 @@
 package com.tapatron
 
+import java.lang.Runtime.getRuntime
+
 import com.tapatron.common.json.CustomJacksonModule
 import com.tapatron.controller.{PostController, UserController}
-import com.tapatron.security.{AuthFilter, AuthModule, CorsFilter, AuthFilter$}
+import com.tapatron.security.{AuthFilter, AuthModule, CorsFilter}
 import com.twitter.finagle.http.{Request, Response}
 import com.twitter.finatra.http.HttpServer
 import com.twitter.finatra.http.filters.CommonFilters
@@ -10,7 +12,8 @@ import com.twitter.finatra.http.routing.HttpRouter
 import com.twitter.finatra.logging.filter.{LoggingMDCFilter, TraceIdMDCFilter}
 import com.twitter.finatra.logging.modules.Slf4jBridgeModule
 import com.twitter.inject.requestscope.FinagleRequestScopeFilter
-import com.typesafe.config.{ConfigFactory, Config}
+import com.typesafe.config.ConfigFactory
+import com.zaxxer.hikari.HikariDataSource
 
 object ServerMain extends Server
 
@@ -34,5 +37,4 @@ class Server extends HttpServer {
       .add[UserController]
       .add[PostController]
   }
-
 }

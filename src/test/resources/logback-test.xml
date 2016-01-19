@@ -6,10 +6,10 @@
     </encoder>
   </appender>
 
-  <logger name="com.twitter" level="debug"/>
-  <logger name="com.tapatron" level="debug"/>
+  <logger name="com.twitter" level="ERROR"/>
+  <logger name="com.tapatron" level="TRACE"/>
 
-  <root level="DEBUG">
+  <root level="ERROR">
     <appender-ref ref="STDOUT"/>
   </root>
 </configuration>
